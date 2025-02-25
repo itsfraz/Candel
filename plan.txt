@@ -1,0 +1,15 @@
+quiz-app/  
+├── client/                 # Frontend  
+│   ├── public/  
+│   ├── src/  
+│   │   ├── components/    # Reusable UI elements  
+│   │   ├── pages/         # App screens  
+│   │   ├── utils/         # Helpers & API calls  
+│   │   └── styles/        # Global CSS/Tailwind config  
+├── server/                # Backend  
+│   ├── controllers/  
+│   ├── models/            # Database schemas  
+│   ├── routes/  
+│   └── config/            # Environment variables  
+├── assets/                # Images, icons, fonts  
+└── README.md              # Documentation  

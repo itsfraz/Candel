@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: radial-gradient(circle at center, #1a1a1a, #000);
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      /* Background Effects */
+      .particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+      }
+
+      .particle {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        animation: float 25s infinite linear;
+      }
+
+      .candle {
+        position: relative;
+        width: 30vw;
+        height: 30vh;
+        z-index: 2;
+      }
+
+      .candle-body {
+        width: 15vw;
+        height: 60vh;
+        background: linear-gradient(
+          45deg,
+          #fff 0%,
+          #f5f2eb 15%,
+          #e3e0d8 40%,
+          #d1c8b8 70%,
+          #b8aa94 100%
+        );
+        border-radius: 3vw 3vw 1.5vw 1.5vw;
+        box-shadow: inset 2vw 0 3vw -1vw rgba(0, 0, 0, 0.3),
+          inset -2vw 0 3vw -1vw rgba(0, 0, 0, 0.3);
+        margin: 0 auto;
+        position: relative;
+        filter: drop-shadow(0 0 2vw rgba(255, 140, 0, 0.2));
+      }
+
+      .flame-container {
+        position: absolute;
+        top: -20vh;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .flame {
+        overflow: visible;
+        width: 5vw;
+        height: 25vh;
+        background: linear-gradient(
+          180deg,
+          #fff8e5 0%,
+          #ffd700 20%,
+          #ff8c00 60%,
+          #ff4500 100%
+        );
+        border-radius: 50% 50% 35% 35%;
+        transform-origin: bottom;
+        animation: flicker 0.1s infinite alternate, sway 3s ease-in-out infinite;
+        box-shadow: 0 0 5vw #ff8c00, 0 0 8vw #ff450055, 0 0 12vw #ff000033;
+      }
+
+      .glow {
+        position: absolute;
+        top: -10vh;
+        left: -10vw;
+        width: 20vw;
+        height: 20vw;
+        background: radial-gradient(
+          circle,
+          rgba(255, 165, 0, 0.3) 0%,
+          rgba(255, 165, 0, 0) 70%
+        );
+        filter: blur(5vw);
+        animation: glow-pulse 2s ease-in-out infinite;
+      }
+
+      .melt {
+        position: absolute;
+        width: 1.5vw;
+        height: 4vh;
+        background: linear-gradient(to right, #d1c8b8 0%, #b8aa94 100%);
+        border-radius: 0 0 1vw 1vw;
+        box-shadow: inset 0.3vw 0 0.5vw rgba(0, 0, 0, 0.1);
+        opacity: 0;
+      }
+
+      .melt-1 {
+        left: 20%;
+        top: 90%;
+        animation: melt 15s infinite;
+      }
+      .melt-2 {
+        left: 60%;
+        top: 88%;
+        animation: melt 18s infinite 5s;
+      }
+
+      /* Animations */
+      @keyframes flicker {
+        0% {
+          transform: scaleY(1) skew(1deg);
+        }
+        100% {
+          transform: scaleY(1.08) skew(-1deg);
+        }
+      }
+
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(2deg);
+        }
+        50% {
+          transform: rotate(-2deg);
+        }
+      }
+
+      @keyframes glow-pulse {
+        0%,
+        100% {
+          opacity: 0.6;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.3;
+          transform: scale(1.1);
+        }
+      }
+
+      @keyframes melt {
+        0% {
+          transform: translateY(0);
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(20vh);
+          opacity: 0;
+        }
+      }
+
+      @keyframes float {
+        from {
+          transform: translateY(100vh);
+        }
+        to {
+          transform: translateY(-100vh);
+        }
+      }
+
+      .shadow {
+        position: absolute;
+        width: 25vw;
+        height: 5vh;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        bottom: 2vh;
+        left: 50%;
+        transform: translateX(-50%);
+        filter: blur(3vw);
+      }
+
+      .sparkles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+
+      .spark {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.9);
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        animation: sparkle 1.5s infinite;
+        filter: blur(0.5px);
+      }
+
+      @keyframes sparkle {
+        0% {
+          transform: translateY(0) scale(0);
+          opacity: 0;
+        }
+        20% {
+          transform: translateY(-10vh) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-25vh) scale(0);
+          opacity: 0;
+        }
+      }
+
+      /* Vignette Effect */
+      .vignette {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle,
+          transparent 60%,
+          rgba(0, 0, 0, 0.7)
+        );
+        pointer-events: none;
+      }
+
+      @media (orientation: landscape) {
+        .candle {
+          width: 40vh;
+        }
+        .candle-body {
+          width: 20vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="vignette"></div>
+      <div class="particles"></div>
+
+      <div class="candle">
+        <div class="flame-container">
+          <!-- Add this inside the flame div -->
+          <div class="sparkles" id="sparkles-container"></div>
+          <div class="glow"></div>
+          <div class="flame"></div>
+        </div>
+        <div class="candle-body">
+          <div class="melt melt-1"></div>
+          <div class="melt melt-2"></div>
+        </div>
+        <div class="shadow"></div>
+      </div>
+    </div>
+
+    <script>
+      // Add floating particles
+      const particles = document.querySelector(".particles");
+      for (let i = 0; i < 15; i++) {
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        particle.style.left = `${Math.random() * 100}%`;
+        const size = Math.random() * 2 + 1;
+        particle.style.width = particle.style.height = `${size}px`;
+        particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+        particle.style.animationDelay = `${Math.random() * 20}s`;
+        particles.appendChild(particle);
+      }
+
+      // Add sparkles dynamically
+      function createSparkles() {
+        const container = document.getElementById("sparkles-container");
+        const sparkCount = 15;
+
+        for (let i = 0; i < sparkCount; i++) {
+          const spark = document.createElement("div");
+          spark.className = "spark";
+          spark.style.left = `${Math.random() * 100}%`;
+          spark.style.animationDelay = `${Math.random() * 2}s`;
+          spark.style.animationDuration = `${0.5 + Math.random() * 1.5}s`;
+          spark.style.width = spark.style.height = `${1 + Math.random() * 2}px`;
+          container.appendChild(spark);
+        }
+      }
+      // Add this at the end of your script
+      createSparkles();
+    </script>
+  </body>
+</html>
