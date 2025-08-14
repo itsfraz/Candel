@@ -1,762 +1,1172 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Candle Experience</title>
     <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        background: radial-gradient(circle at center, #1a1a1a, #000);
-      }
-
-      .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        position: relative;
-      }
-
-      /* Background Effects */
-      .particles {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-      }
-
-      .particle {
-        position: absolute;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 50%;
-        animation: float 25s infinite linear;
-      }
-
-      .candle {
-        position: relative;
-        width: 30vw;
-        height: 30vh;
-        z-index: 2;
-      }
-
-      .candle-body {
-        width: 15vw;
-        height: 60vh;
-        background: linear-gradient(
-          45deg,
-          #fff 0%,
-          #f5f2eb 15%,
-          #e3e0d8 40%,
-          #d1c8b8 70%,
-          #b8aa94 100%
-        );
-        border-radius: 3vw 3vw 1.5vw 1.5vw;
-        box-shadow: inset 2vw 0 3vw -1vw rgba(0, 0, 0, 0.3),
-          inset -2vw 0 3vw -1vw rgba(0, 0, 0, 0.3);
-        margin: 0 auto;
-        position: relative;
-        filter: drop-shadow(0 0 2vw rgba(255, 140, 0, 0.2));
-      }
-
-      .flame-container {
-        position: absolute;
-        top: -20vh;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      .flame {
-        overflow: visible;
-        width: 5vw;
-        height: 25vh;
-        background: linear-gradient(
-          180deg,
-          #fff8e5 0%,
-          #ffd700 20%,
-          #ff8c00 60%,
-          #ff4500 100%
-        );
-        border-radius: 50% 50% 35% 35%;
-        transform-origin: bottom;
-        animation: flicker 0.1s infinite alternate, sway 3s ease-in-out infinite;
-        box-shadow: 0 0 5vw #ff8c00, 0 0 8vw #ff450055, 0 0 12vw #ff000033;
-      }
-
-      .glow {
-        position: absolute;
-        top: -10vh;
-        left: -10vw;
-        width: 20vw;
-        height: 20vw;
-        background: radial-gradient(
-          circle,
-          rgba(255, 165, 0, 0.3) 0%,
-          rgba(255, 165, 0, 0) 70%
-        );
-        filter: blur(5vw);
-        animation: glow-pulse 2s ease-in-out infinite;
-        transition:
-          transform 0.6s cubic-bezier(.4,1.6,.4,1),
-          filter 0.6s cubic-bezier(.4,1.6,.4,1),
-          box-shadow 0.6s cubic-bezier(.4,1.6,.4,1);
-        pointer-events: none;
-      }
-
-      .candle:hover .glow {
-        transform: scale(1.25);
-        filter: blur(7vw);
-        /* Optional: add a soft box-shadow for extra bloom */
-        box-shadow: 0 0 8vw 2vw rgba(255, 200, 80, 0.18);
-      }
-
-      .melt {
-        position: absolute;
-        width: 1.5vw;
-        height: 4vh;
-        background: linear-gradient(to right, #d1c8b8 0%, #b8aa94 100%);
-        border-radius: 0 0 1vw 1vw;
-        box-shadow: inset 0.3vw 0 0.5vw rgba(0, 0, 0, 0.1);
-        opacity: 0;
-      }
-
-      .melt-1 {
-        left: 20%;
-        top: 90%;
-        animation: melt 15s infinite;
-      }
-      .melt-2 {
-        left: 60%;
-        top: 88%;
-        animation: melt 18s infinite 5s;
-      }
-
-      /* Animations */
-      @keyframes flicker {
-        0% {
-          transform: scaleY(1) skew(1deg);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        100% {
-          transform: scaleY(1.08) skew(-1deg);
-        }
-      }
 
-      @keyframes sway {
-        0%,
-        100% {
-          transform: rotate(2deg);
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1a1a1a, #000);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        50% {
-          transform: rotate(-2deg);
-        }
-      }
 
-      @keyframes glow-pulse {
-        0%,
-        100% {
-          opacity: 0.6;
-          transform: scale(1);
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
         }
-        50% {
-          opacity: 0.3;
-          transform: scale(1.1);
-        }
-      }
 
-      @keyframes melt {
-        0% {
-          transform: translateY(0);
-          opacity: 0;
+        /* Background Effects */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
         }
-        20% {
-          opacity: 0.8;
-        }
-        100% {
-          transform: translateY(20vh);
-          opacity: 0;
-        }
-      }
 
-      @keyframes float {
-        from {
-          transform: translateY(100vh);
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 25s infinite linear;
         }
-        to {
-          transform: translateY(-100vh);
-        }
-      }
 
-      .shadow {
-        position: absolute;
-        width: 25vw;
-        height: 5vh;
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 50%;
-        bottom: 2vh;
-        left: 50%;
-        transform: translateX(-50%);
-        filter: blur(3vw);
-      }
-
-      .sparkles {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-      }
-
-      .spark {
-        position: absolute;
-        background: rgba(255, 255, 255, 0.9);
-        width: 2px;
-        height: 2px;
-        border-radius: 50%;
-        animation: sparkle 1.5s infinite;
-        filter: blur(0.5px);
-      }
-
-      @keyframes sparkle {
-        0% {
-          transform: translateY(0) scale(0);
-          opacity: 0;
-        }
-        20% {
-          transform: translateY(-10vh) scale(1);
-          opacity: 1;
-        }
-        100% {
-          transform: translateY(-25vh) scale(0);
-          opacity: 0;
-        }
-      }
-
-      /* Vignette Effect */
-      .vignette {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(
-          circle,
-          transparent 60%,
-          rgba(0, 0, 0, 0.7)
-        );
-        pointer-events: none;
-      }
-
-      .heatwave {
-        position: absolute;
-        left: 50%;
-        top: -8vh;
-        width: 7vw;
-        height: 22vh;
-        transform: translateX(-50%);
-        pointer-events: none;
-        z-index: 3;
-        opacity: 0.45;
-        background: repeating-linear-gradient(
-          120deg,
-          rgba(255,255,255,0.08) 0 8%,
-          rgba(255,255,255,0.18) 8% 16%,
-          rgba(255,255,255,0.08) 16% 24%
-        );
-        filter: blur(2.5px) contrast(1.2) brightness(1.1);
-        animation: heatwave-rise 2.2s linear infinite, heatwave-wobble 1.2s ease-in-out infinite alternate;
-        mix-blend-mode: lighten;
-      }
-
-      @keyframes heatwave-rise {
-        0% {
-          opacity: 0.35;
-          transform: translateX(-50%) translateY(0) scaleX(1) scaleY(1);
-        }
-        70% {
-          opacity: 0.55;
-        }
-        100% {
-          opacity: 0;
-          transform: translateX(-50%) translateY(-8vh) scaleX(1.08) scaleY(1.12);
-        }
-      }
-      @keyframes heatwave-wobble {
-        0% { filter: blur(2.5px) contrast(1.2) brightness(1.1); }
-        50% { filter: blur(3.2px) contrast(1.25) brightness(1.13); }
-        100% { filter: blur(2.5px) contrast(1.2) brightness(1.1); }
-      }
-
-      @media (orientation: landscape) {
         .candle {
-          width: 40vh;
+            position: relative;
+            width: 30vw;
+            height: 30vh;
+            z-index: 2;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
+
+        .candle:hover {
+            transform: scale(1.05);
+        }
+
         .candle-body {
-          width: 20vh;
+            width: 15vw;
+            height: 60vh;
+            background: linear-gradient(
+                45deg,
+                #fff 0%,
+                #f5f2eb 15%,
+                #e3e0d8 40%,
+                #d1c8b8 70%,
+                #b8aa94 100%
+            );
+            border-radius: 3vw 3vw 1.5vw 1.5vw;
+            box-shadow: inset 2vw 0 3vw -1vw rgba(0, 0, 0, 0.3),
+                        inset -2vw 0 3vw -1vw rgba(0, 0, 0, 0.3);
+            margin: 0 auto;
+            position: relative;
+            filter: drop-shadow(0 0 2vw rgba(255, 140, 0, 0.2));
         }
-      }
 
-      .stars-layer {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-      }
-      #stars-back { z-index: 0; }
-      #stars-mid { z-index: 1; }
-      #stars-front { z-index: 2; }
+        .flame-container {
+            position: absolute;
+            top: -20vh;
+            left: 50%;
+            transform: translateX(-50%);
+        }
 
-      .star {
-        position: absolute;
-        border-radius: 50%;
-        background: white;
-        opacity: 0.7;
-        pointer-events: none;
-        will-change: transform, opacity;
-        filter: blur(0.2px);
-        animation: star-twinkle 2.5s infinite alternate;
-      }
-      .star.mid {
-        opacity: 0.85;
-        filter: blur(0.5px);
-        animation-duration: 2s;
-      }
-      .star.front {
-        opacity: 1;
-        filter: blur(0.1px);
-        animation-duration: 1.5s;
-      }
+        .flame {
+            overflow: visible;
+            width: 5vw;
+            height: 25vh;
+            background: linear-gradient(
+                180deg,
+                #fff8e5 0%,
+                #ffd700 20%,
+                #ff8c00 60%,
+                #ff4500 100%
+            );
+            border-radius: 50% 50% 35% 35%;
+            transform-origin: bottom;
+            animation: flicker 0.1s infinite alternate, sway 3s ease-in-out infinite;
+            box-shadow: 0 0 5vw #ff8c00, 0 0 8vw #ff450055, 0 0 12vw #ff000033;
+        }
 
-      @keyframes star-twinkle {
-        0%   { opacity: 0.6; }
-        50%  { opacity: 1; }
-        100% { opacity: 0.7; }
-      }
+        .glow {
+            position: absolute;
+            top: -10vh;
+            left: -10vw;
+            width: 20vw;
+            height: 20vw;
+            background: radial-gradient(
+                circle,
+                rgba(255, 165, 0, 0.3) 0%,
+                rgba(255, 165, 0, 0) 70%
+            );
+            filter: blur(5vw);
+            animation: glow-pulse 2s ease-in-out infinite;
+            transition:
+                transform 0.6s cubic-bezier(.4,1.6,.4,1),
+                filter 0.6s cubic-bezier(.4,1.6,.4,1),
+                box-shadow 0.6s cubic-bezier(.4,1.6,.4,1);
+            pointer-events: none;
+        }
 
-      #fireflies {
-        position: absolute;
-        left: 0; top: 0;
-        width: 100vw; height: 100vh;
-        pointer-events: none;
-        z-index: 4;
-      }
-      .firefly {
-        position: absolute;
-        width: 1.2vw;
-        height: 1.2vw;
-        border-radius: 50%;
-        background: radial-gradient(circle, #fffbe6 0%, #ffe066 40%, #ffb70000 100%);
-        box-shadow: 0 0 1vw 0.3vw #ffe06699, 0 0 2vw 0.5vw #fffbe655;
-        opacity: 0.85;
-        animation: firefly-blink 2.5s infinite;
-        will-change: opacity, filter;
-        filter: blur(0.2vw);
-        transition: opacity 0.3s;
-      }
-      @keyframes firefly-blink {
-        0%, 100% { opacity: 0.85; filter: blur(0.2vw);}
-        10% { opacity: 0.2; filter: blur(0.4vw);}
-        20% { opacity: 1; filter: blur(0vw);}
-        30% { opacity: 0.5; }
-        60% { opacity: 1; }
-        80% { opacity: 0.3; }
-      }
+        .candle:hover .glow {
+            transform: scale(1.25);
+            filter: blur(7vw);
+            box-shadow: 0 0 8vw 2vw rgba(255, 200, 80, 0.18);
+        }
+
+        .melt {
+            position: absolute;
+            width: 1.5vw;
+            height: 4vh;
+            background: linear-gradient(to right, #d1c8b8 0%, #b8aa94 100%);
+            border-radius: 0 0 1vw 1vw;
+            box-shadow: inset 0.3vw 0 0.5vw rgba(0, 0, 0, 0.1);
+            opacity: 0;
+        }
+
+        .melt-1 {
+            left: 20%;
+            top: 90%;
+            animation: melt 15s infinite;
+        }
+        .melt-2 {
+            left: 60%;
+            top: 88%;
+            animation: melt 18s infinite 5s;
+        }
+
+        /* Animations */
+        @keyframes flicker {
+            0% {
+                transform: scaleY(1) skew(1deg);
+            }
+            100% {
+                transform: scaleY(1.08) skew(-1deg);
+            }
+        }
+
+        @keyframes sway {
+            0%,
+            100% {
+                transform: rotate(2deg);
+            }
+            50% {
+                transform: rotate(-2deg);
+            }
+        }
+
+        @keyframes glow-pulse {
+            0%,
+            100% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.3;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes melt {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(20vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh);
+            }
+            to {
+                transform: translateY(-100vh);
+            }
+        }
+
+        .shadow {
+            position: absolute;
+            width: 25vw;
+            height: 5vh;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            bottom: 2vh;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: blur(3vw);
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .spark {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            animation: sparkle 1.5s infinite;
+            filter: blur(0.5px);
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+            20% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-25vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Vignette Effect */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle,
+                transparent 60%,
+                rgba(0, 0, 0, 0.7)
+            );
+            pointer-events: none;
+        }
+
+        .heatwave {
+            position: absolute;
+            left: 50%;
+            top: -8vh;
+            width: 7vw;
+            height: 22vh;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0.45;
+            background: repeating-linear-gradient(
+                120deg,
+                rgba(255,255,255,0.08) 0 8%,
+                rgba(255,255,255,0.18) 8% 16%,
+                rgba(255,255,255,0.08) 16% 24%
+            );
+            filter: blur(2.5px) contrast(1.2) brightness(1.1);
+            animation: heatwave-rise 2.2s linear infinite, heatwave-wobble 1.2s ease-in-out infinite alternate;
+            mix-blend-mode: lighten;
+        }
+
+        @keyframes heatwave-rise {
+            0% {
+                opacity: 0.35;
+                transform: translateX(-50%) translateY(0) scaleX(1) scaleY(1);
+            }
+            70% {
+                opacity: 0.55;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-8vh) scaleX(1.08) scaleY(1.12);
+            }
+        }
+        @keyframes heatwave-wobble {
+            0% { filter: blur(2.5px) contrast(1.2) brightness(1.1); }
+            50% { filter: blur(3.2px) contrast(1.25) brightness(1.13); }
+            100% { filter: blur(2.5px) contrast(1.2) brightness(1.1); }
+        }
+
+        @media (orientation: landscape) {
+            .candle {
+                width: 40vh;
+            }
+            .candle-body {
+                width: 20vh;
+            }
+        }
+
+        .stars-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        #stars-back { z-index: 0; }
+        #stars-mid { z-index: 1; }
+        #stars-front { z-index: 2; }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.7;
+            pointer-events: none;
+            will-change: transform, opacity;
+            filter: blur(0.2px);
+            animation: star-twinkle 2.5s infinite alternate;
+        }
+        .star.mid {
+            opacity: 0.85;
+            filter: blur(0.5px);
+            animation-duration: 2s;
+        }
+        .star.front {
+            opacity: 1;
+            filter: blur(0.1px);
+            animation-duration: 1.5s;
+        }
+
+        @keyframes star-twinkle {
+            0%   { opacity: 0.6; }
+            50%  { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        #fireflies {
+            position: absolute;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 4;
+        }
+        .firefly {
+            position: absolute;
+            width: 1.2vw;
+            height: 1.2vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fffbe6 0%, #ffe066 40%, #ffb70000 100%);
+            box-shadow: 0 0 1vw 0.3vw #ffe06699, 0 0 2vw 0.5vw #fffbe655;
+            opacity: 0.85;
+            animation: firefly-blink 2.5s infinite;
+            will-change: opacity, filter;
+            filter: blur(0.2vw);
+            transition: opacity 0.3s;
+        }
+        @keyframes firefly-blink {
+            0%, 100% { opacity: 0.85; filter: blur(0.2vw);}
+            10% { opacity: 0.2; filter: blur(0.4vw);}
+            20% { opacity: 1; filter: blur(0vw);}
+            30% { opacity: 0.5; }
+            60% { opacity: 1; }
+            80% { opacity: 0.3; }
+        }
+
+        /* UI Elements */
+        .ui-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            width: 250px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+
+        .ui-panel h2 {
+            margin-top: 0;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .slider-container input {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .slider-value {
+            width: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #ff8c00, #ffd700);
+            border: none;
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.8);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            font-weight: bold;
+            letter-spacing: 2px;
+            z-index: 10;
+        }
+
+        .temperature-display {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+
+        .temperature-value {
+            font-size: 1.8rem;
+            color: #ff8c00;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .temperature-label {
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .candle-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+            width: 200px;
+        }
+
+        .info-item {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .wax-drip {
+            box-shadow: 0 0 0.5vw #e3e0d888;
+            transition: opacity 0.5s;
+        }
+
+        #wax-pool {
+            transition: width 1.2s cubic-bezier(.4,1.6,.4,1), opacity 2s;
+        }
+
+        .flame-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .flame-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 165, 0, 0.7);
+            box-shadow: 0 0 10px #ff8c00;
+            animation: flame-particle-rise 1.5s infinite;
+        }
+
+        @keyframes flame-particle-rise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50px) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        .candle-name {
+            position: absolute;
+            top: -30vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffd700;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+            z-index: 10;
+            animation: name-pulse 3s infinite;
+        }
+
+        @keyframes name-pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .magic-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 6;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .magic-effect.active {
+            opacity: 1;
+        }
+
+        .magic-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: #ffd700;
+            box-shadow: 0 0 5px #ff8c00;
+            animation: magic-float 3s infinite linear;
+        }
+
+        @keyframes magic-float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(20px);
+                opacity: 0;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="vignette"></div>
-      <!-- Starry parallax background layers -->
-      <div class="stars-layer" id="stars-back"></div>
-      <div class="stars-layer" id="stars-mid"></div>
-      <div class="stars-layer" id="stars-front"></div>
-      <div class="particles"></div>
-      <!-- Fireflies layer -->
-      <div id="fireflies"></div>
-
-      <div class="candle">
-        <div class="flame-container">
-          <!-- Add this inside the flame div -->
-          <div class="sparkles" id="sparkles-container"></div>
-          <div class="glow"></div>
-          <div class="flame"></div>
-          <!-- Heatwave distortion effect -->
-          <div class="heatwave"></div>
+</head>
+<body>
+    <div class="title">Magical Candle Experience</div>
+    
+    <div class="ui-panel">
+        <h2>Candle Controls</h2>
+        <div class="control-group">
+            <label for="flame-size">Flame Size</label>
+            <div class="slider-container">
+                <input type="range" id="flame-size" min="0.5" max="2" step="0.1" value="1">
+                <span class="slider-value" id="flame-size-value">1.0</span>
+            </div>
         </div>
-        <div class="candle-body">
-          <div class="melt melt-1"></div>
-          <div class="melt melt-2"></div>
-          <!-- Wax drips will be injected here -->
-          <div id="wax-drips"></div>
-          <div id="wax-pool"></div>
+        <div class="control-group">
+            <label for="flame-intensity">Flame Intensity</label>
+            <div class="slider-container">
+                <input type="range" id="flame-intensity" min="0.5" max="2" step="0.1" value="1">
+                <span class="slider-value" id="flame-intensity-value">1.0</span>
+            </div>
         </div>
-        <div class="shadow"></div>
-      </div>
+        <div class="control-group">
+            <label for="wax-drip-rate">Wax Drip Rate</label>
+            <div class="slider-container">
+                <input type="range" id="wax-drip-rate" min="0.5" max="3" step="0.1" value="1">
+                <span class="slider-value" id="wax-drip-rate-value">1.0</span>
+            </div>
+        </div>
+        <button id="magic-btn" class="btn">Magic Effect</button>
+        <button id="reset-btn" class="btn">Reset Candle</button>
+    </div>
+    
+    <div class="candle-info">
+        <div class="info-item">Candle Type: <span class="info-value">Premium Paraffin</span></div>
+        <div class="info-item">Burn Time: <span class="info-value" id="burn-time">00:00:00</span></div>
+        <div class="info-item">Wax Remaining: <span class="info-value" id="wax-remaining">100%</span></div>
+        <div class="info-item">Flicker Count: <span class="info-value" id="flicker-count">0</span></div>
+    </div>
+    
+    <div class="temperature-display">
+        <div class="temperature-value" id="temperature">22°C</div>
+        <div class="temperature-label">Ambient Temperature</div>
+    </div>
+    
+    <div class="instructions">
+        Click on the candle to blow it out | Move mouse to create wind effect
     </div>
 
-    <!-- Ambient fire audio (hidden) -->
-    <audio id="fire-audio" src="fire-crackle.mp3" loop autoplay style="display:none"></audio>
+    <div class="container">
+        <div class="vignette"></div>
+        <!-- Starry parallax background layers -->
+        <div class="stars-layer" id="stars-back"></div>
+        <div class="stars-layer" id="stars-mid"></div>
+        <div class="stars-layer" id="stars-front"></div>
+        <div class="particles"></div>
+        <!-- Fireflies layer -->
+        <div id="fireflies"></div>
+
+        <div class="candle" id="candle">
+            <div class="candle-name">Enchanted Candle</div>
+            <div class="flame-container">
+                <!-- Add this inside the flame div -->
+                <div class="sparkles" id="sparkles-container"></div>
+                <div class="glow"></div>
+                <div class="flame"></div>
+                <!-- Heatwave distortion effect -->
+                <div class="heatwave"></div>
+                <div class="flame-effect" id="flame-effect"></div>
+            </div>
+            <div class="candle-body">
+                <div class="melt melt-1"></div>
+                <div class="melt melt-2"></div>
+                <!-- Wax drips will be injected here -->
+                <div id="wax-drips"></div>
+                <div id="wax-pool"></div>
+            </div>
+            <div class="shadow"></div>
+            <div class="magic-effect" id="magic-effect"></div>
+        </div>
+    </div>
 
     <script>
-      // Add floating particles
-      const particles = document.querySelector(".particles");
-      const particleCount = 15;
-      const particleData = [];
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement("div");
-        particle.className = "particle";
-        const left = Math.random() * 100;
-        particle.style.left = `${left}%`;
-        const size = Math.random() * 2 + 1;
-        particle.style.width = particle.style.height = `${size}px`;
-        particle.style.top = `${Math.random() * 100}%`;
-        particle.style.animation = "none"; // We'll animate with JS
-        particles.appendChild(particle);
-        particleData.push({
-          el: particle,
-          x: left,
-          y: Math.random() * 100,
-          speed: 0.02 + Math.random() * 0.03,
-          drift: 0,
-        });
-      }
+        // State management
+        const state = {
+            flameSize: 1,
+            flameIntensity: 1,
+            waxDripRate: 1,
+            isLit: true,
+            burnTime: 0,
+            waxRemaining: 100,
+            flickerCount: 0,
+            temperature: 22,
+            lastClickTime: 0
+        };
 
-      // Add sparkles dynamically
-      function createSparkles() {
-        const container = document.getElementById("sparkles-container");
-        const sparkCount = 15;
+        // DOM Elements
+        const candle = document.getElementById('candle');
+        const flame = document.querySelector('.flame');
+        const glow = document.querySelector('.glow');
+        const flameEffect = document.getElementById('flame-effect');
+        const magicEffect = document.getElementById('magic-effect');
+        const waxDripContainer = document.getElementById("wax-drips");
+        const waxPool = document.getElementById("wax-pool");
+        const flameSizeSlider = document.getElementById('flame-size');
+        const flameIntensitySlider = document.getElementById('flame-intensity');
+        const waxDripRateSlider = document.getElementById('wax-drip-rate');
+        const flameSizeValue = document.getElementById('flame-size-value');
+        const flameIntensityValue = document.getElementById('flame-intensity-value');
+        const waxDripRateValue = document.getElementById('wax-drip-rate-value');
+        const magicBtn = document.getElementById('magic-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const burnTimeDisplay = document.getElementById('burn-time');
+        const waxRemainingDisplay = document.getElementById('wax-remaining');
+        const flickerCountDisplay = document.getElementById('flicker-count');
+        const temperatureDisplay = document.getElementById('temperature');
 
-        for (let i = 0; i < sparkCount; i++) {
-          const spark = document.createElement("div");
-          spark.className = "spark";
-          spark.style.left = `${Math.random() * 100}%`;
-          spark.style.animationDelay = `${Math.random() * 2}s`;
-          spark.style.animationDuration = `${0.5 + Math.random() * 1.5}s`;
-          spark.style.width = spark.style.height = `${1 + Math.random() * 2}px`;
-          container.appendChild(spark);
-        }
-      }
-      createSparkles();
-
-      // --- Wind Simulation ---
-      let wind = 0; // -1 (left) to 1 (right)
-      let targetWind = 0;
-      let lastGust = Date.now();
-
-      // Mouse controls wind
-      document.addEventListener("mousemove", (e) => {
-        const center = window.innerWidth / 2;
-        const max = window.innerWidth / 2;
-        targetWind = Math.max(-1, Math.min(1, (e.clientX - center) / max));
-      });
-
-      // Random gusts if no mouse movement
-      setInterval(() => {
-        // If mouse hasn't moved for 2s, random gust
-        if (Date.now() - lastGust > 2000) {
-          targetWind = (Math.random() - 0.5) * 1.5; // -0.75 to 0.75
-        }
-      }, 2000);
-
-      document.addEventListener("mousemove", () => {
-        lastGust = Date.now();
-      });
-
-      // Animate flame, particles, and glow
-      const flame = document.querySelector(".flame");
-      const glow = document.querySelector(".glow");
-
-      function animate() {
-        // Smooth wind transition
-        wind += (targetWind - wind) * 0.03;
-
-        // --- Flame bending ---
-        // Max bend: -18deg (left) to 18deg (right)
-        const bend = wind * 18;
-        // Slight squash/stretch for realism
-        const scaleX = 1 - Math.abs(wind) * 0.15;
-        const scaleY = 1 + Math.abs(wind) * 0.12;
-        flame.style.transform =
-          `rotate(${bend}deg) scaleX(${scaleX}) scaleY(${scaleY})`;
-
-        // --- Glow distortion ---
-        // Move glow in wind direction, squash a bit
-        glow.style.transform =
-          `translateX(${wind * 4}vw) scaleX(${1 + Math.abs(wind) * 0.2}) scaleY(${1 - Math.abs(wind) * 0.08})`;
-
-        // --- Particle drift ---
-        for (let p of particleData) {
-          // Drift horizontally with wind
-          p.x += wind * 0.08 + (Math.random() - 0.5) * 0.01;
-          p.y -= p.speed;
-          // Wrap around
-          if (p.y < -2) {
-            p.y = 102;
-            p.x = Math.random() * 100;
-          }
-          if (p.x < 0) p.x = 100;
-          if (p.x > 100) p.x = 0;
-          p.el.style.left = `${p.x}%`;
-          p.el.style.top = `${p.y}%`;
+        // Initialize UI
+        function initUI() {
+            flameSizeSlider.addEventListener('input', (e) => {
+                state.flameSize = parseFloat(e.target.value);
+                flameSizeValue.textContent = state.flameSize.toFixed(1);
+                updateFlameSize();
+            });
+            
+            flameIntensitySlider.addEventListener('input', (e) => {
+                state.flameIntensity = parseFloat(e.target.value);
+                flameIntensityValue.textContent = state.flameIntensity.toFixed(1);
+                updateFlameIntensity();
+            });
+            
+            waxDripRateSlider.addEventListener('input', (e) => {
+                state.waxDripRate = parseFloat(e.target.value);
+                waxDripRateValue.textContent = state.waxDripRate.toFixed(1);
+                updateWaxDripRate();
+            });
+            
+            magicBtn.addEventListener('click', () => {
+                activateMagicEffect();
+            });
+            
+            resetBtn.addEventListener('click', () => {
+                resetCandle();
+            });
+            
+            candle.addEventListener('click', () => {
+                toggleCandle();
+            });
+            
+            // Initialize wax pool
+            waxPool.style.position = "absolute";
+            waxPool.style.left = "50%";
+            waxPool.style.bottom = "-2vh";
+            waxPool.style.transform = "translateX(-50%)";
+            waxPool.style.width = "0vw";
+            waxPool.style.height = "1.5vh";
+            waxPool.style.background = "radial-gradient(ellipse at center, #f5f2eb 60%, #e3e0d8 100%)";
+            waxPool.style.borderRadius = "50%";
+            waxPool.style.opacity = "0";
+            waxPool.style.pointerEvents = "none";
+            waxPool.style.zIndex = "1";
         }
 
-        requestAnimationFrame(animate);
-      }
-      animate();
+        // Update flame size based on slider
+        function updateFlameSize() {
+            const scale = state.flameSize;
+            flame.style.width = `${5 * scale}vw`;
+            flame.style.height = `${25 * scale}vh`;
+            glow.style.width = `${20 * scale}vw`;
+            glow.style.height = `${20 * scale}vw`;
+        }
 
-      // --- Wax Drip Animation ---
-      const waxDripContainer = document.getElementById("wax-drips");
-      const waxPool = document.getElementById("wax-pool");
+        // Update flame intensity based on slider
+        function updateFlameIntensity() {
+            const intensity = state.flameIntensity;
+            flame.style.boxShadow = `0 0 ${5 * intensity}vw #ff8c00, 0 0 ${8 * intensity}vw #ff450055, 0 0 ${12 * intensity}vw #ff000033`;
+            glow.style.background = `radial-gradient(circle, rgba(255, 165, 0, ${0.3 * intensity}) 0%, rgba(255, 165, 0, 0) 70%)`;
+        }
 
-      // Style for wax pool
-      waxPool.style.position = "absolute";
-      waxPool.style.left = "50%";
-      waxPool.style.bottom = "-2vh";
-      waxPool.style.transform = "translateX(-50%)";
-      waxPool.style.width = "0vw";
-      waxPool.style.height = "1.5vh";
-      waxPool.style.background = "radial-gradient(ellipse at center, #f5f2eb 60%, #e3e0d8 100%)";
-      waxPool.style.borderRadius = "50%";
-      waxPool.style.opacity = "0";
-      waxPool.style.pointerEvents = "none";
-      waxPool.style.zIndex = "1";
+        // Update wax drip rate
+        function updateWaxDripRate() {
+            // This will be used in the wax drip creation logic
+        }
 
-      function createWaxDrip() {
-        const drip = document.createElement("div");
-        drip.className = "wax-drip";
-        // Random horizontal start (within candle width)
-        const left = 15 + Math.random() * 70; // percent
-        drip.style.position = "absolute";
-        drip.style.left = left + "%";
-        drip.style.top = "0";
-        drip.style.width = 0.7 + Math.random() * 0.7 + "vw";
-        drip.style.height = 4 + Math.random() * 6 + "vh";
-        drip.style.background = "linear-gradient(to bottom, #fffbe9 0%, #e3e0d8 100%)";
-        drip.style.borderRadius = "1vw";
-        drip.style.opacity = "0.85";
-        drip.style.pointerEvents = "none";
-        drip.style.zIndex = "2";
-        drip.style.transform = "translateY(0) scaleX(" + (0.7 + Math.random() * 0.6) + ")";
-        waxDripContainer.appendChild(drip);
+        // Toggle candle on/off
+        function toggleCandle() {
+            const now = Date.now();
+            // Prevent double clicks
+            if (now - state.lastClickTime < 300) return;
+            state.lastClickTime = now;
+            
+            if (state.isLit) {
+                // Blow out candle
+                state.isLit = false;
+                flame.style.display = 'none';
+                glow.style.display = 'none';
+                document.querySelector('.candle-name').textContent = "Extinguished Candle";
+            } else {
+                // Light candle
+                state.isLit = true;
+                flame.style.display = 'block';
+                glow.style.display = 'block';
+                document.querySelector('.candle-name').textContent = "Enchanted Candle";
+            }
+        }
 
-        // Random path curve
-        const curve = (Math.random() - 0.5) * 10; // px
+        // Activate magic effect
+        function activateMagicEffect() {
+            magicEffect.classList.add('active');
+            
+            // Create magic particles
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'magic-particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 2}s`;
+                particle.style.width = `${1 + Math.random() * 3}px`;
+                particle.style.height = particle.style.width;
+                magicEffect.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 3000);
+            }
+            
+            // Remove active class after effect
+            setTimeout(() => {
+                magicEffect.classList.remove('active');
+            }, 3000);
+        }
 
-        // Animate drip
-        let progress = 0;
-        const duration = 1800 + Math.random() * 1200; // ms
-        const start = performance.now();
+        // Reset candle to initial state
+        function resetCandle() {
+            state.flameSize = 1;
+            state.flameIntensity = 1;
+            state.waxDripRate = 1;
+            state.isLit = true;
+            state.burnTime = 0;
+            state.waxRemaining = 100;
+            state.flickerCount = 0;
+            
+            flameSizeSlider.value = 1;
+            flameIntensitySlider.value = 1;
+            waxDripRateSlider.value = 1;
+            
+            flameSizeValue.textContent = '1.0';
+            flameIntensityValue.textContent = '1.0';
+            waxDripRateValue.textContent = '1.0';
+            
+            flame.style.display = 'block';
+            glow.style.display = 'block';
+            document.querySelector('.candle-name').textContent = "Enchanted Candle";
+            
+            updateFlameSize();
+            updateFlameIntensity();
+            updateDisplays();
+        }
 
-        function animateDrip(now) {
-          progress = (now - start) / duration;
-          if (progress > 1) progress = 1;
-          // Gravity curve: ease-in
-          const y = progress * 38; // vh
-          const x = Math.sin(progress * Math.PI) * curve;
-          drip.style.transform =
-            `translateY(${y}vh) translateX(${x}px) scaleX(${0.7 + Math.random() * 0.6})`;
+        // Update display elements
+        function updateDisplays() {
+            // Format burn time as HH:MM:SS
+            const hours = Math.floor(state.burnTime / 3600);
+            const minutes = Math.floor((state.burnTime % 3600) / 60);
+            const seconds = state.burnTime % 60;
+            burnTimeDisplay.textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            waxRemainingDisplay.textContent = `${Math.round(state.waxRemaining)}%`;
+            flickerCountDisplay.textContent = state.flickerCount;
+            temperatureDisplay.textContent = `${state.temperature}°C`;
+        }
 
-          // Fade out at end
-          if (progress > 0.85) {
-            drip.style.opacity = (1 - progress) * 1.2;
-          }
+        // Create flame particles
+        function createFlameParticles() {
+            if (!state.isLit) return;
+            
+            const particleCount = 5;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'flame-particle';
+                particle.style.left = `${45 + Math.random() * 10}%`;
+                particle.style.top = `${90 + Math.random() * 10}%`;
+                particle.style.width = `${1 + Math.random() * 3}px`;
+                particle.style.height = particle.style.width;
+                particle.style.background = `rgba(${255 - Math.random() * 50}, ${165 - Math.random() * 50}, 0, ${0.5 + Math.random() * 0.5})`;
+                flameEffect.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1500);
+            }
+        }
 
-          if (progress < 1) {
+        // Create wax drip
+        function createWaxDrip() {
+            if (!state.isLit) return;
+            
+            const drip = document.createElement("div");
+            drip.className = "wax-drip";
+            // Random horizontal start (within candle width)
+            const left = 15 + Math.random() * 70; // percent
+            drip.style.position = "absolute";
+            drip.style.left = left + "%";
+            drip.style.top = "0";
+            drip.style.width = 0.7 + Math.random() * 0.7 + "vw";
+            drip.style.height = 4 + Math.random() * 6 + "vh";
+            drip.style.background = "linear-gradient(to bottom, #fffbe9 0%, #e3e0d8 100%)";
+            drip.style.borderRadius = "1vw";
+            drip.style.opacity = "0.85";
+            drip.style.pointerEvents = "none";
+            drip.style.zIndex = "2";
+            drip.style.transform = "translateY(0) scaleX(" + (0.7 + Math.random() * 0.6) + ")";
+            waxDripContainer.appendChild(drip);
+
+            // Random path curve
+            const curve = (Math.random() - 0.5) * 10; // px
+
+            // Animate drip
+            let progress = 0;
+            const duration = (1800 + Math.random() * 1200) / state.waxDripRate; // ms
+            const start = performance.now();
+
+            function animateDrip(now) {
+                progress = (now - start) / duration;
+                if (progress > 1) progress = 1;
+                // Gravity curve: ease-in
+                const y = progress * 38; // vh
+                const x = Math.sin(progress * Math.PI) * curve;
+                drip.style.transform =
+                    `translateY(${y}vh) translateX(${x}px) scaleX(${0.7 + Math.random() * 0.6})`;
+
+                // Fade out at end
+                if (progress > 0.85) {
+                    drip.style.opacity = (1 - progress) * 1.2;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateDrip);
+                } else {
+                    drip.remove();
+                    // Pool effect
+                    showWaxPool(left);
+                }
+            }
             requestAnimationFrame(animateDrip);
-          } else {
-            drip.remove();
-            // Pool effect
-            showWaxPool(left);
-          }
         }
-        requestAnimationFrame(animateDrip);
-      }
 
-      // Pool animation
-      function showWaxPool(leftPercent) {
-        // Expand and fade pool
-        waxPool.style.transition = "none";
-        waxPool.style.opacity = "0.7";
-        waxPool.style.width = "0vw";
-        waxPool.style.left = leftPercent + "%";
-        setTimeout(() => {
-          waxPool.style.transition = "width 1.2s cubic-bezier(.4,1.6,.4,1), opacity 2s";
-          waxPool.style.width = 2.5 + Math.random() * 2 + "vw";
-          waxPool.style.opacity = "0";
-        }, 10);
-      }
-
-      // Loop to create random drips
-      function waxDripLoop() {
-        createWaxDrip();
-        setTimeout(waxDripLoop, 1200 + Math.random() * 1800);
-      }
-      waxDripLoop();
-
-      // --- Wax Drip CSS ---
-      const waxDripStyle = document.createElement("style");
-      waxDripStyle.innerHTML = `
-        .wax-drip {
-          box-shadow: 0 0 0.5vw #e3e0d888;
-          transition: opacity 0.5s;
+        // Show wax pool
+        function showWaxPool(leftPercent) {
+            // Expand and fade pool
+            waxPool.style.transition = "none";
+            waxPool.style.opacity = "0.7";
+            waxPool.style.width = "0vw";
+            waxPool.style.left = leftPercent + "%";
+            setTimeout(() => {
+                waxPool.style.transition = "width 1.2s cubic-bezier(.4,1.6,.4,1), opacity 2s";
+                waxPool.style.width = 2.5 + Math.random() * 2 + "vw";
+                waxPool.style.opacity = "0";
+            }, 10);
         }
-        #wax-pool {
-          transition: width 1.2s cubic-bezier(.4,1.6,.4,1), opacity 2s;
+
+        // Wax drip loop
+        function waxDripLoop() {
+            createWaxDrip();
+            setTimeout(waxDripLoop, (1200 + Math.random() * 1800) / state.waxDripRate);
         }
-      `;
-      document.head.appendChild(waxDripStyle);
 
-      // --- Starry Parallax Background ---
-      function createStars(layerId, count, sizeRange, className) {
-        const layer = document.getElementById(layerId);
-        for (let i = 0; i < count; i++) {
-          const star = document.createElement("div");
-          star.className = "star" + (className ? " " + className : "");
-          const size = sizeRange[0] + Math.random() * (sizeRange[1] - sizeRange[0]);
-          star.style.width = star.style.height = size + "px";
-          star.style.left = Math.random() * 100 + "vw";
-          star.style.top = Math.random() * 100 + "vh";
-          star.style.opacity = (0.6 + Math.random() * 0.4).toFixed(2);
-          star.style.animationDelay = (Math.random() * 2) + "s";
-          layer.appendChild(star);
+        // Create sparkles
+        function createSparkles() {
+            const container = document.getElementById("sparkles-container");
+            const sparkCount = 15;
+
+            for (let i = 0; i < sparkCount; i++) {
+                const spark = document.createElement("div");
+                spark.className = "spark";
+                spark.style.left = `${Math.random() * 100}%`;
+                spark.style.animationDelay = `${Math.random() * 2}s`;
+                spark.style.animationDuration = `${0.5 + Math.random() * 1.5}s`;
+                spark.style.width = spark.style.height = `${1 + Math.random() * 2}px`;
+                container.appendChild(spark);
+            }
         }
-      }
-      createStars("stars-back", 60, [0.7, 1.5], "");
-      createStars("stars-mid", 40, [1.2, 2.2], "mid");
-      createStars("stars-front", 20, [1.5, 2.8], "front");
 
-      // Animate parallax movement
-      const starLayers = [
-        { id: "stars-back", speed: 0.02 },
-        { id: "stars-mid", speed: 0.06 },
-        { id: "stars-front", speed: 0.12 }
-      ];
-      let starOffsets = [0, 0, 0];
-
-      function animateStars() {
-        starLayers.forEach((layer, idx) => {
-          starOffsets[idx] += layer.speed;
-          const stars = document.getElementById(layer.id).children;
-          for (let s = 0; s < stars.length; s++) {
-            // Move stars upward and wrap
-            const star = stars[s];
-            let top = parseFloat(star.style.top);
-            top -= layer.speed;
-            if (top < 0) top = 100;
-            star.style.top = top + "vh";
-          }
-        });
-        requestAnimationFrame(animateStars);
-      }
-      animateStars();
-
-      // --- Ambient Crackling Fire Audio & Visual Sync ---
-      // Make sure fire-crackle.mp3 is present in your project folder
-
-      const audio = document.getElementById('fire-audio');
-      let audioCtx, analyser, source, dataArray;
-
-      function setupAudioAnalysis() {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        source = audioCtx.createMediaElementSource(audio);
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 64;
-        dataArray = new Uint8Array(analyser.frequencyBinCount);
-        source.connect(analyser);
-        analyser.connect(audioCtx.destination);
-      }
-
-      // Resume audio context on user gesture (required by browsers)
-      document.body.addEventListener('click', () => {
-        if (!audioCtx) {
-          setupAudioAnalysis();
-          audio.play();
-        } else if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
+        // Create stars
+        function createStars(layerId, count, sizeRange, className) {
+            const layer = document.getElementById(layerId);
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement("div");
+                star.className = "star" + (className ? " " + className : "");
+                const size = sizeRange[0] + Math.random() * (sizeRange[1] - sizeRange[0]);
+                star.style.width = star.style.height = size + "px";
+                star.style.left = Math.random() * 100 + "vw";
+                star.style.top = Math.random() * 100 + "vh";
+                star.style.opacity = (0.6 + Math.random() * 0.4).toFixed(2);
+                star.style.animationDelay = (Math.random() * 2) + "s";
+                layer.appendChild(star);
+            }
         }
-      }, { once: true });
 
-      // Flicker sync variables
-      let lastAudioFlicker = 0;
-
-      function audioFlickerSync() {
-        if (analyser && dataArray) {
-          analyser.getByteFrequencyData(dataArray);
-          // Use higher frequencies for crackle, lower for general fire
-          const low = dataArray.slice(0, 4).reduce((a, b) => a + b, 0) / 4;
-          const high = dataArray.slice(4).reduce((a, b) => a + b, 0) / (dataArray.length - 4);
-
-          // Map to [0,1]
-          const lowNorm = Math.min(1, low / 128);
-          const highNorm = Math.min(1, high / 128);
-
-          // Flame brightness: scaleY and box-shadow intensity
-          const flameEl = document.querySelector('.flame');
-          const glowEl = document.querySelector('.glow');
-          if (flameEl && glowEl) {
-            // Subtle scale and shadow flicker
-            const scale = 1 + lowNorm * 0.10 + highNorm * 0.05;
-            const shadow = 5 + lowNorm * 10 + highNorm * 8;
-            flameEl.style.filter = `brightness(${1 + highNorm * 0.25})`;
-            flameEl.style.boxShadow = `0 0 ${shadow}vw #ff8c00, 0 0 ${shadow * 1.5}vw #ff450055, 0 0 ${shadow * 2}vw #ff000033`;
-            flameEl.style.transform += ` scaleY(${scale})`;
-
-            // Glow flicker
-            glowEl.style.opacity = 0.6 + highNorm * 0.25;
-            glowEl.style.filter = `blur(${5 + highNorm * 3}vw)`;
-          }
+        // Animate stars
+        function animateStars() {
+            const starLayers = [
+                { id: "stars-back", speed: 0.02 },
+                { id: "stars-mid", speed: 0.06 },
+                { id: "stars-front", speed: 0.12 }
+            ];
+            
+            function animate() {
+                starLayers.forEach((layer) => {
+                    const stars = document.getElementById(layer.id).children;
+                    for (let s = 0; s < stars.length; s++) {
+                        // Move stars upward and wrap
+                        const star = stars[s];
+                        let top = parseFloat(star.style.top);
+                        top -= layer.speed;
+                        if (top < 0) top = 100;
+                        star.style.top = top + "vh";
+                    }
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
         }
-        requestAnimationFrame(audioFlickerSync);
-      }
 
-      // Start flicker sync after audio context is ready
-      function tryStartAudioSync() {
-        if (analyser && dataArray) {
-          audioFlickerSync();
-        } else {
-          setTimeout(tryStartAudioSync, 300);
+        // Create fireflies
+        function createFireflies() {
+            const fireflyCount = 10;
+            const fireflies = [];
+            const fireflyContainer = document.getElementById("fireflies");
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2 + 60;
+
+            for (let i = 0; i < fireflyCount; i++) {
+                const el = document.createElement("div");
+                el.className = "firefly";
+                // Randomize blink animation
+                el.style.animationDelay = (Math.random() * 2.5) + "s";
+                fireflyContainer.appendChild(el);
+                fireflies.push({
+                    el,
+                    // Orbit parameters
+                    angle: Math.random() * Math.PI * 2,
+                    radius: 10 + Math.random() * 18, // vw
+                    yRadius: 7 + Math.random() * 8,  // vh
+                    speed: 0.005 + Math.random() * 0.003,
+                    phase: Math.random() * Math.PI * 2,
+                    verticalDrift: Math.random() * 0.5 + 0.5,
+                });
+            }
+
+            function animateFireflies() {
+                const t = performance.now() / 1000;
+                fireflies.forEach((f, i) => {
+                    // Curved, floating path
+                    const a = f.angle + t * f.speed + Math.sin(t * 0.3 + f.phase) * 0.2;
+                    const x = centerX + Math.cos(a) * f.radius * 16; // vw to px
+                    const y = centerY + Math.sin(a) * f.yRadius * 10 + Math.sin(t * f.verticalDrift + f.phase) * 12;
+                    f.el.style.left = `${x}px`;
+                    f.el.style.top = `${y}px`;
+                });
+                requestAnimationFrame(animateFireflies);
+            }
+            animateFireflies();
         }
-      }
-      tryStartAudioSync();
 
-      // --- Fireflies Animation ---
-      const fireflyCount = 10;
-      const fireflies = [];
-      const fireflyContainer = document.getElementById("fireflies");
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2 + 60;
+        // Create floating particles
+        function createFloatingParticles() {
+            const particles = document.querySelector(".particles");
+            const particleCount = 15;
+            const particleData = [];
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement("div");
+                particle.className = "particle";
+                const left = Math.random() * 100;
+                particle.style.left = `${left}%`;
+                const size = Math.random() * 2 + 1;
+                particle.style.width = particle.style.height = `${size}px`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animation = "none"; // We'll animate with JS
+                particles.appendChild(particle);
+                particleData.push({
+                    el: particle,
+                    x: left,
+                    y: Math.random() * 100,
+                    speed: 0.02 + Math.random() * 0.03,
+                    drift: 0,
+                });
+            }
 
-      for (let i = 0; i < fireflyCount; i++) {
-        const el = document.createElement("div");
-        el.className = "firefly";
-        // Randomize blink animation
-        el.style.animationDelay = (Math.random() * 2.5) + "s";
-        fireflyContainer.appendChild(el);
-        fireflies.push({
-          el,
-          // Orbit parameters
-          angle: Math.random() * Math.PI * 2,
-          radius: 10 + Math.random() * 18, // vw
-          yRadius: 7 + Math.random() * 8,  // vh
-          speed: 0.005 + Math.random() * 0.003,
-          phase: Math.random() * Math.PI * 2,
-          verticalDrift: Math.random() * 0.5 + 0.5,
-        });
-      }
+            // Animate particles
+            function animateParticles() {
+                for (let p of particleData) {
+                    p.y -= p.speed;
+                    // Wrap around
+                    if (p.y < -2) {
+                        p.y = 102;
+                        p.x = Math.random() * 100;
+                    }
+                    p.el.style.left = `${p.x}%`;
+                    p.el.style.top = `${p.y}%`;
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+        }
 
-      function animateFireflies() {
-        const t = performance.now() / 1000;
-        fireflies.forEach((f, i) => {
-          // Curved, floating path
-          const a = f.angle + t * f.speed + Math.sin(t * 0.3 + f.phase) * 0.2;
-          const x = centerX + Math.cos(a) * f.radius * 16; // vw to px
-          const y = centerY + Math.sin(a) * f.yRadius * 10 + Math.sin(t * f.verticalDrift + f.phase) * 12;
-          f.el.style.left = `${x}px`;
-          f.el.style.top = `${y}px`;
-        });
-        requestAnimationFrame(animateFireflies);
-      }
-      animateFireflies();
+        // Main animation loop
+        function animate() {
+            // Update burn time
+            if (state.isLit) {
+                state.burnTime += 1;
+                state.waxRemaining = Math.max(0, 100 - (state.burnTime / 100));
+                state.flickerCount += 1;
+                
+                // Randomly change temperature
+                if (Math.random() > 0.95) {
+                    state.temperature += Math.random() > 0.5 ? 1 : -1;
+                    state.temperature = Math.max(18, Math.min(26, state.temperature));
+                }
+            }
+            
+            updateDisplays();
+            createFlameParticles();
+            
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize everything
+        function init() {
+            initUI();
+            createSparkles();
+            createStars("stars-back", 60, [0.7, 1.5], "");
+            createStars("stars-mid", 40, [1.2, 2.2], "mid");
+            createStars("stars-front", 20, [1.5, 2.8], "front");
+            animateStars();
+            createFireflies();
+            createFloatingParticles();
+            waxDripLoop();
+            animate();
+            updateDisplays();
+        }
+
+        // Start the application
+        window.addEventListener('load', init);
     </script>
-  </body>
+</body>
 </html>
